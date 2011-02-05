@@ -3,6 +3,11 @@
 require 'open-uri'
 
 module CarrierWave
+  
+  def self.escape(uri)
+    URI.escape(uri)
+  end
+  
   module Uploader
     module Download
       extend ActiveSupport::Concern
@@ -13,7 +18,11 @@ module CarrierWave
 
       class RemoteFile
         def initialize(uri)
-          @uri = URI.parse(URI.escape(uri))
+          @uri = URI.parse(CarrierWave.escape(uri))
+        end
+        
+        def escaped_uri
+          @uri
         end
 
         def original_filename
